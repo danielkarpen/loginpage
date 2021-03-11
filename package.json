@@ -28,7 +28,9 @@
       "prettier",
       "plugin:react/recommended"
     ],
-    "rules": {"react/react-in-jsx-scope": 0}
+    "rules": {
+      "react/react-in-jsx-scope": 0
+    }
   },
   "browserslist": {
     "production": [
