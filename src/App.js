@@ -3,7 +3,6 @@ import { Form } from 'components';
 import { BaseCard } from 'components/base';
 import React from 'react';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
-import './index.css';
 
 function App() {
   return (
