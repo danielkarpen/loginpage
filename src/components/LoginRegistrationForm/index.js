@@ -8,41 +8,40 @@ import {
   Input,
 } from '@chakra-ui/react';
 import api from 'api';
-import { useState } from 'react';
+import { useReducer } from 'react';
 
-function renderSubmitTxt(mode) {
-  switch (mode) {
-    case 'login':
-      return 'Login';
-    case 'registration':
-      return 'Register';
-    case 'forgotten':
-      return 'Reset Password';
+function reducer(state, { type, payload }) {
+  switch (type) {
+    case 'activate-login-mode':
+      return { ...state, ...{ mode: 'login', info: '' } };
+    case 'activate-registration-mode':
+      return { ...state, ...{ mode: 'registration', info: '' } };
+    case 'activate-forgotten-mode':
+      return { ...state, ...{ mode: 'forgotten', info: '' } };
+    case 'update-info':
+      return { ...state, ...{ info: payload } };
     default:
-      throw new Error('Illegal form mode');
+      throw new Error('Illegal action!');
   }
 }
 
 function LoginRegistrationForm() {
-  const [forgot, setForgot] = useState(false);
-  const [mode, setMode] = useState('login');
-  const [info, setInfo] = useState(null);
+  const [formState, dispatch] = useReducer(reducer, { mode: 'login' });
 
   const handleClick = ({ target: { innerText } }) => {
-    setInfo(() => null);
     if (
       innerText === 'Already Have an Account?' ||
       innerText === 'Login/Register'
     ) {
-      setMode(() => 'login');
+      dispatch({ type: 'activate-login-mode' });
     } else {
       switch (innerText) {
         case 'No Account Yet?':
-          setMode(() => 'registration');
+          dispatch({ type: 'activate-registration-mode' });
           break;
 
         case 'Forgot Password?':
-          setMode(() => 'forgotten');
+          dispatch({ type: 'activate-forgotten-mode' });
           break;
         default:
           throw new Error('Illegal action!');
@@ -50,18 +49,31 @@ function LoginRegistrationForm() {
     }
   };
 
+  function renderSubmitTxt(mode) {
+    switch (formState.mode) {
+      case 'login':
+        return 'Login';
+      case 'registration':
+        return 'Register';
+      case 'forgotten':
+        return 'Reset Password';
+      default:
+        throw new Error('Illegal form mode');
+    }
+  }
+
   const handleSubmit = async function (event) {
     event.preventDefault();
     const email = event.target.elements[0].value;
     const password = event.target.elements[1].value;
 
-    switch (mode) {
+    switch (formState.mode) {
       case 'login':
         try {
           const user = await api.show(email, password);
           console.log(user);
         } catch (error) {
-          setInfo(() => error.message);
+          dispatch({ type: 'update-info', payload: error.message });
         }
         break;
       case 'registration':
@@ -69,70 +81,82 @@ function LoginRegistrationForm() {
           const user = await api.create(email, password);
           console.log(user);
         } catch (error) {
-          setInfo(() => error.message);
+          dispatch({ type: 'update-info', payload: error.message });
         }
         break;
       case 'forgotten':
         try {
           const msg = await api.update(email);
-          setInfo(() => msg);
+          dispatch({ type: 'update-info', payload: msg });
         } catch (error) {
-          setInfo(() => error.message);
+          dispatch({ type: 'update-info', payload: error.message });
         }
         break;
       default:
         throw new Error('Illegal action!');
     }
 
-    await api.show(
-      event.target.elements[0].value,
-      event.target.elements[0].value
-    );
+    // await api.show(
+    //   event.target.elements[0].value,
+    //   event.target.elements[0].value
+    // );
   };
 
   return (
     <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
-      <FormControl id="email">
+      <FormControl id="email" isRequired>
         <FormLabel>Email address</FormLabel>
         <Input type="email" />
       </FormControl>
 
-      <Collapse in={!(mode === 'forgotten')} animateOpacity>
-        <FormControl id="password">
+      <Collapse in={!(formState.mode === 'forgotten')} animateOpacity>
+        <FormControl id="password" isRequired>
           <FormLabel>Password</FormLabel>
           <Input type="password" />
         </FormControl>
       </Collapse>
 
-      <Collapse in={mode === 'registration'} animateOpacity>
-        <FormControl id="name">
+      <Collapse
+        in={formState.mode === 'registration'}
+        animateOpacity
+        unmountOnExit
+      >
+        <FormControl id="name" isRequired>
           <FormLabel>Full Name</FormLabel>
           <Input type="text" />
         </FormControl>
 
         <FormControl id="profile">
           <FormLabel>Upload a Profile Pic?</FormLabel>
-          <Input type="file" accept="image/*" />
+          <Input
+            type="file"
+            accept="image/*"
+            className="no-border no-left-padding"
+          />
         </FormControl>
       </Collapse>
 
       <ButtonGroup variant="outline" spacing="6">
         <Button type="submit" colorScheme="green">
-          {renderSubmitTxt(mode)}
+          {renderSubmitTxt(formState.mode)}
         </Button>
 
-        <Fade in={!(mode === 'forgotten')}>
+        <Fade in={!(formState.mode === 'forgotten')}>
           <Button type="button" colorScheme="blue" onClick={handleClick}>
-            {mode === 'login' ? 'No Account Yet?' : 'Already Have an Account?'}
+            {formState.mode === 'login'
+              ? 'No Account Yet?'
+              : 'Already Have an Account?'}
           </Button>
         </Fade>
 
         <Button type="button" colorScheme="orange" onClick={handleClick}>
-          {mode === 'forgotten' ? 'Login/Register' : 'Forgot Password?'}
+          {formState.mode === 'forgotten'
+            ? 'Login/Register'
+            : 'Forgot Password?'}
         </Button>
       </ButtonGroup>
 
-      {info ? <p className="text-red-300">{info}</p> : null}
+      {formState.info ? <p className="text-red-300">{formState.info}</p> : null}
     </form>
   );
 }
