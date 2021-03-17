@@ -1,29 +1,39 @@
-# Create React App Customized with Linting and Chakra UI with Tailwinds 2
+# React Login/Registration Page
 
-- includes absolute imports using `src` as base for CRA with in `jsconfig.json`.
-- includes `components` and `pages` directories.
-- includes custom VS Code settings and extension recommendations
-- includes `prettier` and linting for 🪝s.
+## Table of Contents
 
-## `npm start`
+- [Overview](#overview)
+- [Built With](#built-with)
+- [Features](#features)
+- [Contact](#contact)
+- [Acknowledgements](#acknowledgements)
 
-Runs the app in the development mode.
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Overview
 
-The page will reload if you make edits.
-You will also see any lint errors in the console.
+<!-- TODO: Add a screenshot of the live project.
+    1. Link to a 'live demo.'
+    2. Clean functional login/registration page utilizing Google Firebase Authentication 
+    3. Implements useReducer Hook to change form views when interacting with 'Forgot Password', 'Create an Account' buttons.
+    4. Share any other tips or guidance for others attempting this or something similar.
+ -->
 
-## `npm test`
+### Built With
 
-Launches the test runner in the interactive watch mode.
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- HTML
+- JavaScript
+- React
+- Chakra UI
+- TailwindCSS 
 
-## `npm run build`
 
-Builds the app for production to the `build` folder.
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Features
 
-The build is minified and the filenames include the hashes.
-Your app is ready to be deployed!
+<!-- TODO: List what specific 'user problems' that this application solves. -->
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Contact
+
+<!-- TODO: Include icons and links to your RELEVANT, PROFESSIONAL 'DEV-ORIENTED' social media. LinkedIn and dev.to are minimum. -->
+
+## Acknowledgements
+
+<!-- TODO: List any blog posts, tutorials or plugins that you may have used to complete the project. Only list those that had a significant impact. Obviously, we all 'Google' stuff while working on our things, but maybe something in particular stood out as a 'major contributor' to your skill set for this project. -->
