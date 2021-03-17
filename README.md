@@ -9,7 +9,8 @@
 - [Acknowledgements](#acknowledgements)
 
 ## Overview
-
+ Clean functional login/registration page utilizing Google Firebase Authentication 
+ Implements useReducer Hook to change form views when interacting with 'Forgot Password', 'Create an Account' buttons.
 <!-- TODO: Add a screenshot of the live project.
     1. Link to a 'live demo.'
     2. Clean functional login/registration page utilizing Google Firebase Authentication 
